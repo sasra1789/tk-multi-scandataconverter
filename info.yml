@@ -10,24 +10,41 @@
 
 # Metadata defining the behaviour and requirements for this engine
 
-# expected fields in the configuration file for this engine
+# # expected fields in the configuration file for this engine
+# configuration:
+
+# # this app works in all engines - it does not contain
+# # any host application specific commands
+# supported_engines:
+
+# # the Shotgun fields that this engine needs in order to operate correctly
+# requires_shotgun_fields:
+
+# # More verbose description of this item
+# display_name: "To test a version up"
+# description: " Just Test"
+
+# # Required minimum versions for this item to run
+# requires_shotgun_version:
+# requires_core_version: 
+# requires_engine_version:
+
+# # the frameworks required to run this app
+# frameworks:
+
+
+name: tk-multi-scandataconverter
+display_name: ScanData Converter
+description: Converts scan data and registers to ShotGrid
 configuration:
 
-# this app works in all engines - it does not contain
-# any host application specific commands
-supported_engines:
+requires_shotgun_version: "v8.0.0"
+requires_core_version: "v0.18.0"
 
-# the Shotgun fields that this engine needs in order to operate correctly
-requires_shotgun_fields:
+supported_engines: [tk-desktop]
 
-# More verbose description of this item
-display_name: "Flow Production Tracking Toolkit Starter"
-description: "Template App to quickly get up and running with the Flow Production Tracking Toolkit."
+python_path: python
+# python_path: python # 반드시 필요함 
+python_version: 3
 
-# Required minimum versions for this item to run
-requires_shotgun_version:
-requires_core_version: "v0.14.28"
-requires_engine_version:
-
-# the frameworks required to run this app
 frameworks:

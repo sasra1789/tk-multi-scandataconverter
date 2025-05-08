@@ -9,7 +9,11 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 
+
+
+# #Shotgrid Toolkit 에서 모든 앱이 상속받는 기본 베이스 클래스 
 from sgtk.platform import Application
+import traceback
 
 
 class SgtkStarterApp(Application):
@@ -17,25 +21,40 @@ class SgtkStarterApp(Application):
     The app entry point. This class is responsible for initializing and tearing down
     the application, handle menu registration etc.
     """
-
     def init_app(self):
-        """
-        Called as the application is being initialized
-        """
 
-        # first, we use the special import_module command to access the app module
-        # that resides inside the python folder in the app. This is where the actual UI
-        # and business logic of the app is kept. By using the import_module command,
-        # toolkit's code reload mechanism will work properly.
-        app_payload = self.import_module("app")
+        try:
+            app_payload = self.import_module("app")
+            menu_callback = lambda : app_payload.io_main.main()
+            self.engine.register_command("ScanData Converter", menu_callback)
+        
+        except Exception:
+            import traceback
+            traceback.print_exc()
+            
 
-        # now register a *command*, which is normally a menu entry of some kind on a Shotgun
-        # menu (but it depends on the engine). The engine will manage this command and
-        # whenever the user requests the command, it will call out to the callback.
+    # ## 이게 진짜가 될수도 
+    # def init_app(self):
+    #     """
+    #     Called as the application is being initialized
+    #     """
+    #     self.engine.register_command(
+    #         "ScanData Converter",
+    #         self.launch_app,
+    #         {"type": "studio"}
+    #     )
+    
+    # def launch_app(self):
+    #     self.logger.info(" launch_app() 진입")
+    #     try:
+    #         self.logger.info(" launch_app() 진입")
+    #         app_payload = self.import_module("app")
+    #         app_payload.io_main.main()
+            
 
-        # first, set up our callback, calling out to a method inside the app module contained
-        # in the python folder of the app
-        menu_callback = lambda: app_payload.dialog.show_dialog(self)
+    #     except Exception as e:
+    #         self.logger.error(" main() 실행 실패: %s" % e)
+    #         self.logger.error(traceback.format_exc())
+   
 
-        # now register the command with the engine
-        self.engine.register_command("Show Starter Template App...", menu_callback)
+   

@@ -1,55 +1,157 @@
 # -*- coding: utf-8 -*-
 
-################################################################################
-## Form generated from reading UI file 'dialog.ui'
-##
-## Created by: Qt User Interface Compiler version 5.15.2
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
+# Form implementation generated from reading ui file 'dialog.ui'
+#
+# Created: Fri Jul 10 15:44:44 2020
+#      by: pyside-uic 0.2.15 running on PySide 1.2.4
+#
+# WARNING! All changes made in this file will be lost!
 
-from tank.platform.qt import QtCore
-for name, cls in QtCore.__dict__.items():
-    if isinstance(cls, type): globals()[name] = cls
-
-from tank.platform.qt import QtGui
-for name, cls in QtGui.__dict__.items():
-    if isinstance(cls, type): globals()[name] = cls
-
-
-from  . import resources_rc
+from tank.platform.qt import QtCore, QtGui
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        if not Dialog.objectName():
-            Dialog.setObjectName(u"Dialog")
-        Dialog.resize(431, 392)
-        self.horizontalLayout = QHBoxLayout(Dialog)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.logo_example = QLabel(Dialog)
-        self.logo_example.setObjectName(u"logo_example")
-        self.logo_example.setPixmap(QPixmap(u":/res/sg_logo.png"))
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(1044, 675)
+        self.verticalLayout = QtGui.QVBoxLayout(Dialog)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.label = QtGui.QLabel(Dialog)
+        self.label.setObjectName("label")
+        self.horizontalLayout_2.addWidget(self.label)
+        self.lineEdit = QtGui.QLineEdit(Dialog)
+        self.lineEdit.setObjectName("lineEdit")
+        self.horizontalLayout_2.addWidget(self.lineEdit)
+        self.select_dir = QtGui.QPushButton(Dialog)
+        self.select_dir.setObjectName("select_dir")
+        self.horizontalLayout_2.addWidget(self.select_dir)
+        self.create_excel = QtGui.QPushButton(Dialog)
+        self.create_excel.setObjectName("create_excel")
+        self.horizontalLayout_2.addWidget(self.create_excel)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout_3 = QtGui.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.check_all_btn = QtGui.QPushButton(Dialog)
+        self.check_all_btn.setObjectName("check_all_btn")
+        self.horizontalLayout_3.addWidget(self.check_all_btn)
+        self.uncheck_all_btn = QtGui.QPushButton(Dialog)
+        self.uncheck_all_btn.setObjectName("uncheck_all_btn")
+        self.horizontalLayout_3.addWidget(self.uncheck_all_btn)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem)
+        self.label_4 = QtGui.QLabel(Dialog)
+        self.label_4.setObjectName("label_4")
+        self.non_retime_check = QtGui.QCheckBox()
+        self.horizontalLayout_3.addWidget(self.label_4)
+        self.horizontalLayout_3.addWidget(self.non_retime_check)
+        self.label_3 = QtGui.QLabel(Dialog)
+        self.label_3.setObjectName("label_3")
+        self.mov_dpx_check = QtGui.QCheckBox()
+        self.horizontalLayout_3.addWidget(self.label_3)
+        self.horizontalLayout_3.addWidget(self.mov_dpx_check)
+        self.label_5 = QtGui.QLabel(Dialog)
+        self.label_5.setObjectName('label_5')
+        self.clip_check = QtGui.QCheckBox()
+        self.horizontalLayout_3.addWidget(self.label_5)
+        self.horizontalLayout_3.addWidget(self.clip_check)
 
-        self.horizontalLayout.addWidget(self.logo_example)
+        self.label_6 = QtGui.QLabel(Dialog)
+        self.label_6.setObjectName('label_6')
+        self.smooth_check = QtGui.QCheckBox()
+        self.horizontalLayout_3.addWidget(self.label_6)
+        self.horizontalLayout_3.addWidget(self.smooth_check)
 
-        self.context = QLabel(Dialog)
-        self.context.setObjectName(u"context")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.context.sizePolicy().hasHeightForWidth())
-        self.context.setSizePolicy(sizePolicy)
-        self.context.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
-
-        self.horizontalLayout.addWidget(self.context)
+        self.label_2 = QtGui.QLabel(Dialog)
+        self.label_2.setObjectName("label_2")
+        self.horizontalLayout_3.addWidget(self.label_2)
+        self.colorspace_combo = QtGui.QComboBox(Dialog)
+        self.colorspace_combo.setObjectName("colorspace_combo")
+        self.horizontalLayout_3.addWidget(self.colorspace_combo)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.seq_model_view = QtGui.QTableView(Dialog)
+        self.seq_model_view.setObjectName("seq_model_view")
+        self.verticalLayout.addWidget(self.seq_model_view)
+        self.horizontalLayout_4 = QtGui.QHBoxLayout()
+        self.horizontalLayout_4.setSpacing(0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.excel_file_label = QtGui.QLabel(Dialog)
+        self.excel_file_label.setMinimumSize(QtCore.QSize(400, 0))
+        self.excel_file_label.setText("")
+        self.excel_file_label.setObjectName("excel_file_label")
+        self.horizontalLayout_4.addWidget(self.excel_file_label)
+        self.groupBox_2 = QtGui.QGroupBox(Dialog)
+        self.groupBox_2.setObjectName("groupBox_2")
+        self.horizontalLayout_5 = QtGui.QHBoxLayout(self.groupBox_2)
+        self.horizontalLayout_5.setSpacing(0)
+        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.save_excel = QtGui.QPushButton(self.groupBox_2)
+        self.save_excel.setObjectName("save_excel")
+        self.horizontalLayout_5.addWidget(self.save_excel)
+        self.edit_excel = QtGui.QPushButton(self.groupBox_2)
+        self.edit_excel.setObjectName("edit_excel")
+        self.horizontalLayout_5.addWidget(self.edit_excel)
+        self.horizontalLayout_4.addWidget(self.groupBox_2)
+        self.groupBox = QtGui.QGroupBox(Dialog)
+        self.groupBox.setObjectName("groupBox")
+        self.gridLayout = QtGui.QGridLayout(self.groupBox)
+        self.gridLayout.setSpacing(0)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+        self.v_timecode = QtGui.QPushButton(self.groupBox)
+        self.v_timecode.setObjectName("v_timecode")
+        self.gridLayout.addWidget(self.v_timecode, 0, 0, 1, 1)
+        self.v_org = QtGui.QPushButton(self.groupBox)
+        self.v_org.setObjectName("v_org")
+        self.gridLayout.addWidget(self.v_org, 0, 1, 1, 1)
+        self.v_src = QtGui.QPushButton(self.groupBox)
+        self.v_src.setObjectName("v_src")
+        self.gridLayout.addWidget(self.v_src, 1, 0, 1, 1)
+        self.v_editor = QtGui.QPushButton(self.groupBox)
+        self.v_editor.setObjectName("v_editor")
+        self.gridLayout.addWidget(self.v_editor, 1, 1, 1, 1)
+        self.horizontalLayout_4.addWidget(self.groupBox)
+        self.groupBox_3 = QtGui.QGroupBox(Dialog)
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.horizontalLayout_6 = QtGui.QHBoxLayout(self.groupBox_3)
+        self.horizontalLayout_6.setSpacing(0)
+        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.collect = QtGui.QPushButton(self.groupBox_3)
+        self.collect.setObjectName("collect")
+        self.horizontalLayout_6.addWidget(self.collect)
+        self.publish = QtGui.QPushButton(self.groupBox_3)
+        self.publish.setObjectName("publish")
+        self.horizontalLayout_6.addWidget(self.publish)
+        self.horizontalLayout_4.addWidget(self.groupBox_3)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
 
         self.retranslateUi(Dialog)
-
-        QMetaObject.connectSlotsByName(Dialog)
-    # setupUi
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"The Current Sgtk Environment", None))
-        self.logo_example.setText("")
-        self.context.setText(QCoreApplication.translate("Dialog", u"Your Current Context: ", None))
-    # retranslateUi
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "The Current Sgtk Environment", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("Dialog", "Path : ", None, QtGui.QApplication.UnicodeUTF8))
+        self.select_dir.setText(QtGui.QApplication.translate("Dialog", "Select", None, QtGui.QApplication.UnicodeUTF8))
+        self.create_excel.setText(QtGui.QApplication.translate("Dialog", "Load", None, QtGui.QApplication.UnicodeUTF8))
+        self.check_all_btn.setText(QtGui.QApplication.translate("Dialog", "Check All", None, QtGui.QApplication.UnicodeUTF8))
+        self.uncheck_all_btn.setText(QtGui.QApplication.translate("Dialog", "Uncheck All", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("Dialog", "Colorspace", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("Dialog", "MOV to DPX", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_4.setText(QtGui.QApplication.translate("Dialog", "Non Retime", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setText(QtGui.QApplication.translate("Dialog", "ClipLib", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_6.setText(QtGui.QApplication.translate("Dialog", "Smooth Retime", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_2.setTitle(QtGui.QApplication.translate("Dialog", "Excel", None, QtGui.QApplication.UnicodeUTF8))
+        self.save_excel.setText(QtGui.QApplication.translate("Dialog", "Save", None, QtGui.QApplication.UnicodeUTF8))
+        self.edit_excel.setText(QtGui.QApplication.translate("Dialog", "Edit", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox.setTitle(QtGui.QApplication.translate("Dialog", "Validate", None, QtGui.QApplication.UnicodeUTF8))
+        self.v_timecode.setText(QtGui.QApplication.translate("Dialog", "Timecode", None, QtGui.QApplication.UnicodeUTF8))
+        self.v_org.setText(QtGui.QApplication.translate("Dialog", "Version", None, QtGui.QApplication.UnicodeUTF8))
+        self.v_src.setText(QtGui.QApplication.translate("Dialog", "Src Version", None, QtGui.QApplication.UnicodeUTF8))
+        self.v_editor.setText(QtGui.QApplication.translate("Dialog", "Shot for Editorial", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_3.setTitle(QtGui.QApplication.translate("Dialog", "Action", None, QtGui.QApplication.UnicodeUTF8))
+        self.collect.setText(QtGui.QApplication.translate("Dialog", "Collect", None, QtGui.QApplication.UnicodeUTF8))
+        self.publish.setText(QtGui.QApplication.translate("Dialog", "Publish", None, QtGui.QApplication.UnicodeUTF8))
+
+from . import resources_rc

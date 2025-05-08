@@ -15,9 +15,11 @@ import threading
 
 # by importing QT from sgtk rather than directly, we ensure that
 # the code will be compatible with both PySide and PyQt.
-from sgtk.platform.qt import QtCore, QtGui
-from .ui.dialog import Ui_Dialog
 
+## 테스트 
+from sgtk.platform.qt import QtCore, QtGui
+# from .ui.dialog import Ui_Dialog
+from .io_main import main
 # standard toolkit logger
 logger = sgtk.platform.get_logger(__name__)
 
@@ -32,7 +34,8 @@ def show_dialog(app_instance):
 
     # we pass the dialog class to this method and leave the actual construction
     # to be carried out by toolkit.
-    app_instance.engine.show_dialog("Starter Template App...", app_instance, AppDialog)
+    app_instance.engine.show_dialog("Start scandata converter", app_instance, main)
+    # app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
 
 
 class AppDialog(QtGui.QWidget):
@@ -48,15 +51,15 @@ class AppDialog(QtGui.QWidget):
         QtGui.QWidget.__init__(self)
 
         # now load in the UI that was created in the UI designer
-        self.ui = Ui_Dialog()
-        self.ui.setupUi(self)
+        self.ui = main()
+        main(self)
 
         # most of the useful accessors are available through the Application class instance
         # it is often handy to keep a reference to this. You can get it via the following method:
         self._app = sgtk.platform.current_bundle()
 
         # logging happens via a standard toolkit logger
-        logger.info("Launching Starter Application...")
+        logger.info("Launching Scandata Converter Application...")
 
         # via the self._app handle we can for example access:
         # - The engine, via self._app.engine
