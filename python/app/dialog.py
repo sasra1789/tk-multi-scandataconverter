@@ -17,8 +17,6 @@ from .excel_manager import save_to_excel_with_thumbnails, load_excel_data,  get_
 from .scan_structure import create_plate_structure
 from .shotgrid_api import connect_to_shotgrid, find_shot, create_version, create_shot, list_projects
 import shutil
-# from PySide6.QtWidgets import QInputDialog, QFileDialog, QMessageBox
-# from PySide6.QtWidgets import  QWidget
 
 import sgtk
 import os
@@ -44,17 +42,8 @@ def show_dialog(app_instance):
     # # different types of windows. By using these methods, your windows will be correctly
     # # decorated and handled in a consistent fashion by the system.
 
-    # # we pass the dialog class to this method and leave the actual construction
-    # # to be carried out by toolkit.
-    # app_instance.engine.show_dialog("SScandata converter", app_instance, AppDialog)
     app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
 
-    # 여러 번 열리지 않도록
-    # app.engine.show_dialog("Launching ScanData Converter...")
-    # dialog = app.engine.show_dialog("ScanData Converter", app, AppDialog)
-   
-    # dialog = app.engine.show_dialog("ScanData Converter", app, AppDialog)
-    # AppDialog(dialog)  # UI에 컨트롤러 연결
 
 class AppDialog(QtGui.QWidget):
     """
@@ -72,6 +61,15 @@ class AppDialog(QtGui.QWidget):
         # it is often handy to keep a reference to this. You can get it via the following method:
         self._app = sgtk.platform.current_bundle()
 
+
+        # #오구디버깅 
+        #  위젯 바인딩: 앞으로 self. 으로 접근 가능
+        self.project_combo = self.main_window.project_combo
+        self.table = self.main_window.table
+        self.path_label = self.main_window.path_label
+        self.select_button = self.main_window.select_button
+        # 필요한 위젯은 계속 바인딩 가능
+
         # logging happens via a standard toolkit logger
         logger.info("Launching Scandata Converter Application...")
 
@@ -79,13 +77,6 @@ class AppDialog(QtGui.QWidget):
         # - The engine, via self._app.engine
         # - A Shotgun API instance, via self._app.shotgun
         # - An Sgtk API instance, via self._app.sgtk
-
-        # lastly, set up our very basic UI
-        # self.ui.context.setText("Current Context: %s" % self._app.context)
-
-        # super(AppDialog, self).__init__(parent)
-
-        # self.main_window =Ui_Dialog()
 
         self.folder_path = ""  # 선택된 경로 저장
         self.thumb_cache_dir = "/home/rapa/show"  # 썸네일 저장 위치 위치는 나중에 바꿔주기
@@ -111,7 +102,9 @@ class AppDialog(QtGui.QWidget):
 
     
     def on_select_folder(self):
-        folder = QtGui.QFileDialog.getExistingDirectory(self.main_window, "날짜 폴더 선택")
+        #오구디버깅
+        # folder = QtGui.QFileDialog.getExistingDirectory(self.main_window, "날짜 폴더 선택")
+        folder = QtGui.QFileDialog.getExistingDirectory(self, "날짜 폴더 선택")
         if not folder:
             print("X 경로 선택 안됨")
             return
@@ -386,8 +379,16 @@ class AppDialog(QtGui.QWidget):
 
         #샷그리드
 
-    def on_register_to_shotgrid(self):
 
+    # 오구디버깅
+    def on_register_to_shotgrid(self):
+        
+
+        # 오구디버깅
+        project_index = self.project_combo.currentIndex()
+        if project_index < 0:
+            return None
+        project_name = self.project_combo.currentText()
 
         # 프로젝트 선택
         project = self.get_selected_project()
@@ -513,7 +514,9 @@ class AppDialog(QtGui.QWidget):
         if not selected_project:
             print("X 프로젝트가 선택되지 않았습니다.")
             return
-        
+    
+
+    #디버깅용
     # 모든 체크박스 선택 / 해제
     def select_all_rows(self):
         row_count = self.main_window.table.rowCount()
