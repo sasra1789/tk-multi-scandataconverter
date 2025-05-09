@@ -1,13 +1,16 @@
 # main_window.py
+# from sgtk.platform.qt import (
+#     QWidget, QLabel, QPushButton, QTableWidget, QVBoxLayout,
+#     QHBoxLayout, QFileDialog, QTableWidgetItem, QCheckBox, QComboBox
+# )
+# from sgtk.platform.qt import QPixmap
 
-from PySide6.QtWidgets import (
-    QWidget, QLabel, QPushButton, QTableWidget, QVBoxLayout,
-    QHBoxLayout, QFileDialog, QTableWidgetItem, QCheckBox, QComboBox
-)
-from PySide6.QtGui import QPixmap
 import os
 
-class MainWindow(QWidget):
+
+from sgtk.platform.qt import QtCore, QtGui
+
+class MainWindow(QtGui.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("ScanData IO Manager")

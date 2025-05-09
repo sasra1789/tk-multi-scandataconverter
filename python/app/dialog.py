@@ -8,52 +8,62 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 import os
-from main_window import MainWindow
-from ui.dialog import Ui_Dialog
-from scanfile_handler import find_plate_files
-from converter import generate_mov_thumbnail, convert_exr_to_jpg_with_ffmpeg,  convert_to_mp4, convert_to_webm, generate_montage_multi, find_thumbnail_from_montage,  list_excel_versions
-from excel_manager import save_to_excel_with_thumbnails, load_excel_data,  get_next_versioned_filename
-from scan_structure import create_plate_structure
-from shotgrid_api import connect_to_shotgrid, find_shot, create_version, create_shot, list_projects
+
+
+from .scanfile_handler import find_plate_files
+from .converter import generate_mov_thumbnail, convert_exr_to_jpg_with_ffmpeg,  convert_to_mp4, convert_to_webm, generate_montage_multi, find_thumbnail_from_montage,  list_excel_versions
+from .excel_manager import save_to_excel_with_thumbnails, load_excel_data,  get_next_versioned_filename
+from .scan_structure import create_plate_structure
+from .shotgrid_api import connect_to_shotgrid, find_shot, create_version, create_shot, list_projects
 import shutil
-from PySide6.QtWidgets import QInputDialog, QFileDialog, QMessageBox
-from PySide6.QtWidgets import  QWidget
+# from PySide6.QtWidgets import QInputDialog, QFileDialog, QMessageBox
+# from PySide6.QtWidgets import  QWidget
 
 import sgtk
 import os
 import sys
 import threading
 
-# by importing QT from sgtk rather than directly, we ensure that
-# the code will be compatible with both PySide and PyQt.
-
 ## 테스트 
-from sgtk.platform.qt import QtWidgets
-from ui.dialog import Ui_Dialog
+# from sgtk.platform.qt import QWidgets, QInputDialog, QFileDialog, QMessageBox
+from sgtk.platform.qt import QtCore, QtGui
+from .ui.dialog import Ui_Dialog
+# from .main_window import MainWindow
+
+
 # standard toolkit logger
 logger = sgtk.platform.get_logger(__name__)
 
 
-def show_dialog(app_instance):
+def show_dialog(app):
     """
     Shows the main dialog window.
     """
-    # in order to handle UIs seamlessly, each toolkit engine has methods for launching
-    # different types of windows. By using these methods, your windows will be correctly
-    # decorated and handled in a consistent fashion by the system.
+    # # in order to handle UIs seamlessly, each toolkit engine has methods for launching
+    # # different types of windows. By using these methods, your windows will be correctly
+    # # decorated and handled in a consistent fashion by the system.
 
-    # we pass the dialog class to this method and leave the actual construction
-    # to be carried out by toolkit.
-    app_instance.engine.show_dialog("SScandata converter", app_instance, AppDialog)
-    # app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
+    # # we pass the dialog class to this method and leave the actual construction
+    # # to be carried out by toolkit.
+    # app_instance.engine.show_dialog("SScandata converter", app_instance, AppDialog)
+    # # app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
 
+    # 여러 번 열리지 않도록
+    # app.engine.show_dialog("Launching ScanData Converter...")
+    # dialog = app.engine.show_dialog("ScanData Converter", app, AppDialog)
+    dialog = app.engine.show_dialog("ScanData Converter", app, Ui_Dialog)
+    AppDialog(dialog)  # UI에 컨트롤러 연결
 
-class AppDialog(QWidget):
+class AppDialog(QtGui.QWidget):
     """
     Main application dialog window
     """
-    def __init__(self):
-        self.main_window =Ui_Dialog()
+    def __init__(self, parent=None):
+        QtGui.QWidget.__init__(self)
+        super(AppDialog, self).__init__(parent)
+
+        # self.main_window =Ui_Dialog()
+        self.main_window = Ui_Dialog()
         self.folder_path = ""  # 선택된 경로 저장
         self.thumb_cache_dir = "/home/rapa/show"  # 썸네일 저장 위치 위치는 나중에 바꿔주기
     
@@ -78,8 +88,7 @@ class AppDialog(QWidget):
 
     
     def on_select_folder(self):
-        from PySide6.QtWidgets import QFileDialog
-        folder = QFileDialog.getExistingDirectory(self.main_window, "날짜 폴더 선택")
+        folder = QtGui.QFileDialog.getExistingDirectory(self.main_window, "날짜 폴더 선택")
         if not folder:
             print("X 경로 선택 안됨")
             return
@@ -170,7 +179,7 @@ class AppDialog(QWidget):
             return None
 
         #  사용자에게 파일 선택 받기
-        file_name, ok = QInputDialog.getItem(
+        file_name, ok = QtGui.QInputDialog.getItem(
             self.main_window,
             "엑셀 버전 선택",
             "샷그리드에 업로드할 엑셀 파일을 선택하세요:",
@@ -225,8 +234,8 @@ class AppDialog(QWidget):
         # 모두 체크 안될 경우 
         if not data_list:
             print("⚠️ 체크된 항목이 없습니다. 엑셀 저장을 취소합니다.")
-            from PySide6.QtWidgets import QMessageBox
-            QMessageBox.warning(self.main_window, "경고", "✔ 체크된 항목이 없습니다.")
+    
+            QtGui.QMessageBox.warning(self.main_window, "경고", "✔ 체크된 항목이 없습니다.")
             return
 
 
@@ -236,13 +245,13 @@ class AppDialog(QWidget):
         project = self.get_selected_project()
         if not project:
             print("⚠️ 프로젝트가 선택되지 않았습니다.")
-            QMessageBox.warning(self.main_window, "오류", "프로젝트가 선택되지 않았습니다.")
+            QtGui.QMessageBox.warning(self.main_window, "오류", "프로젝트가 선택되지 않았습니다.")
             return
         project_name = project["name"]
 
         # 폴더 선택 다이얼로그 열기
         scan_root = f"/home/rapa/show/{project_name}/product/scan"
-        selected_folder = QFileDialog.getExistingDirectory(
+        selected_folder = QtGui.QFileDialog.getExistingDirectory(
             self.main_window,
             "날짜 폴더 선택",
             scan_root
@@ -260,7 +269,7 @@ class AppDialog(QWidget):
             scan_date_folder = parts[-2]  # 날짜폴더명
             shot_folder_name = parts[-1]  # 샷폴더명
         except IndexError:
-            QMessageBox.warning(self.main_window, "오류", "선택한 폴더 구조가 올바르지 않습니다.")
+            QtGui.QMessageBox.warning(self.main_window, "오류", "선택한 폴더 구조가 올바르지 않습니다.")
             return
 
         print(f" 선택한 날짜: {scan_date_folder}, 샷 폴더명: {shot_folder_name}")
@@ -360,13 +369,13 @@ class AppDialog(QWidget):
         # 프로젝트 선택
         project = self.get_selected_project()
         if not project:
-            QMessageBox.warning(self.main_window, "오류", "프로젝트가 선택되지 않았습니다.")
+            QtGui.QMessageBox.warning(self.main_window, "오류", "프로젝트가 선택되지 않았습니다.")
             return
         project_name = project["name"]
 
         # 샷 폴더 선택
         scan_root = f"/home/rapa/show/{project_name}/product/scan"
-        selected_folder = QFileDialog.getExistingDirectory(
+        selected_folder = QtGui.QFileDialog.getExistingDirectory(
             self.main_window,
             "샷 폴더 선택 (scanlist 있는 폴더)",
             scan_root
@@ -379,7 +388,7 @@ class AppDialog(QWidget):
         #  선택한 폴더에서 scanlist 엑셀 자동 찾기
         excel_files = [f for f in os.listdir(selected_folder) if f.startswith("scanlist") and f.endswith(".xlsx")]
         if not excel_files:
-            QMessageBox.warning(self.main_window, "오류", "선택한 폴더에 scanlist 엑셀이 없습니다.")
+            QtGui.QMessageBox.warning(self.main_window, "오류", "선택한 폴더에 scanlist 엑셀이 없습니다.")
             return
 
         #  가장 최신 버전 엑셀 사용
@@ -436,7 +445,7 @@ class AppDialog(QWidget):
         projects = list_projects(sg)
         project_names = [p["name"] for p in projects]
 
-        project_name, ok = QInputDialog.getItem(
+        project_name, ok = QtGui.QInputDialog.getItem(
             self.main_window,
             "프로젝트 선택",
             "ShotGrid 프로젝트를 선택하세요:",

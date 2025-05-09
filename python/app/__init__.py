@@ -9,4 +9,4 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 
-from . import io_main
+from . import dialog

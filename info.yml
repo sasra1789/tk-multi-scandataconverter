@@ -38,7 +38,7 @@ display_name: ScanData Converter
 description: Converts scan data and registers to ShotGrid
 configuration:
 
-requires_shotgun_version: "v8.0.0"
+requires_shotgun_version:
 requires_core_version: "v0.18.0"
 
 supported_engines: [tk-desktop]

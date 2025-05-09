@@ -9,7 +9,7 @@ from .excel_manager import save_to_excel_with_thumbnails, load_excel_data,  get_
 from .scan_structure import create_plate_structure
 from .shotgrid_api import connect_to_shotgrid, find_shot, create_version, create_shot, list_projects
 import shutil
-from PySide6.QtWidgets import QInputDialog, QFileDialog, QMessageBox
+from sgtk.platform.qt import QInputDialog, QFileDialog, QMessageBox
 
 
 
@@ -187,7 +187,7 @@ class Controller:
         # 모두 체크 안될 경우 
         if not data_list:
             print("⚠️ 체크된 항목이 없습니다. 엑셀 저장을 취소합니다.")
-            from PySide6.QtWidgets import QMessageBox
+            from sgtk.platform.qt import QMessageBox
             QMessageBox.warning(self.main_window, "경고", "✔ 체크된 항목이 없습니다.")
             return
 
