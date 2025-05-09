@@ -1,12 +1,12 @@
 # controller.py
 
 import os
-from .main_window import MainWindow
-from .scanfile_handler import find_plate_files
-from .converter import generate_mov_thumbnail, convert_exr_to_jpg_with_ffmpeg,  convert_to_mp4, convert_to_webm, generate_montage_multi, find_thumbnail_from_montage,  list_excel_versions
-from .excel_manager import save_to_excel_with_thumbnails, load_excel_data,  get_next_versioned_filename
-from .scan_structure import create_plate_structure
-from .shotgrid_api import connect_to_shotgrid, find_shot, create_version, create_shot, list_projects
+from main_window import MainWindow
+from scanfile_handler import find_plate_files
+from converter import generate_mov_thumbnail, convert_exr_to_jpg_with_ffmpeg,  convert_to_mp4, convert_to_webm, generate_montage_multi, find_thumbnail_from_montage,  list_excel_versions
+from excel_manager import save_to_excel_with_thumbnails, load_excel_data,  get_next_versioned_filename
+from scan_structure import create_plate_structure
+from shotgrid_api import connect_to_shotgrid, find_shot, create_version, create_shot, list_projects
 import shutil
 from PySide6.QtWidgets import QInputDialog, QFileDialog, QMessageBox
 

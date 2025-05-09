@@ -17,20 +17,20 @@ import traceback
 
 
 class SgtkStarterApp(Application):
-    """
-    The app entry point. This class is responsible for initializing and tearing down
-    the application, handle menu registration etc.
-    """
-    def init_app(self):
+#     """
+#     The app entry point. This class is responsible for initializing and tearing down
+#     the application, handle menu registration etc.
+#     """
+#     def init_app(self):
 
-        try:
-            app_payload = self.import_module("app")
-            menu_callback = lambda : app_payload.io_main.main()
-            self.engine.register_command("ScanData Converter", menu_callback)
+#         try:
+#             app_payload = self.import_module("app")
+#             menu_callback = lambda : app_payload.io_main.main()
+#             self.engine.register_command("ScanData Converter", menu_callback)
         
-        except Exception:
-            import traceback
-            traceback.print_exc()
+#         except Exception:
+#             import traceback
+#             traceback.print_exc()
             
 
     # ## 이게 진짜가 될수도 
@@ -55,6 +55,27 @@ class SgtkStarterApp(Application):
     #     except Exception as e:
     #         self.logger.error(" main() 실행 실패: %s" % e)
     #         self.logger.error(traceback.format_exc())
-   
+    #         traceback.print_exc()
 
-   
+   # 파쿠리
+
+    ## 이게 진짜가 될수도 
+    def init_app(self):
+        """
+        Called as the application is being initialized
+        """
+        self.logger.info(" launch_app() 진입")
+        try:
+            self.logger.info(" launch_app() 진입")
+            app_payload = self.import_module("app")
+            menu_callback = app_payload.io_main.main()
+            
+            self.engine.register_command(
+                "ScanData Converter",
+                menu_callback,
+                {"type": "studio"}
+            )
+        except Exception as e:
+            self.logger.error(" main() 실행 실패: %s" % e)
+            self.logger.error(traceback.format_exc())
+            traceback.print_exc()

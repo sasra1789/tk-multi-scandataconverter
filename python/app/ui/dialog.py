@@ -7,151 +7,110 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+from PySide6.QtWidgets import (
+    QWidget, QLabel, QPushButton, QTableWidget, QVBoxLayout,
+    QHBoxLayout, QFileDialog, QTableWidgetItem, QCheckBox, QComboBox
+)
+from PySide6.QtGui import QPixmap
+import os
+
 from tank.platform.qt import QtCore, QtGui
 
 class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(1044, 675)
-        self.verticalLayout = QtGui.QVBoxLayout(Dialog)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_2 = QtGui.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label = QtGui.QLabel(Dialog)
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label)
-        self.lineEdit = QtGui.QLineEdit(Dialog)
-        self.lineEdit.setObjectName("lineEdit")
-        self.horizontalLayout_2.addWidget(self.lineEdit)
-        self.select_dir = QtGui.QPushButton(Dialog)
-        self.select_dir.setObjectName("select_dir")
-        self.horizontalLayout_2.addWidget(self.select_dir)
-        self.create_excel = QtGui.QPushButton(Dialog)
-        self.create_excel.setObjectName("create_excel")
-        self.horizontalLayout_2.addWidget(self.create_excel)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout_3 = QtGui.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.check_all_btn = QtGui.QPushButton(Dialog)
-        self.check_all_btn.setObjectName("check_all_btn")
-        self.horizontalLayout_3.addWidget(self.check_all_btn)
-        self.uncheck_all_btn = QtGui.QPushButton(Dialog)
-        self.uncheck_all_btn.setObjectName("uncheck_all_btn")
-        self.horizontalLayout_3.addWidget(self.uncheck_all_btn)
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem)
-        self.label_4 = QtGui.QLabel(Dialog)
-        self.label_4.setObjectName("label_4")
-        self.non_retime_check = QtGui.QCheckBox()
-        self.horizontalLayout_3.addWidget(self.label_4)
-        self.horizontalLayout_3.addWidget(self.non_retime_check)
-        self.label_3 = QtGui.QLabel(Dialog)
-        self.label_3.setObjectName("label_3")
-        self.mov_dpx_check = QtGui.QCheckBox()
-        self.horizontalLayout_3.addWidget(self.label_3)
-        self.horizontalLayout_3.addWidget(self.mov_dpx_check)
-        self.label_5 = QtGui.QLabel(Dialog)
-        self.label_5.setObjectName('label_5')
-        self.clip_check = QtGui.QCheckBox()
-        self.horizontalLayout_3.addWidget(self.label_5)
-        self.horizontalLayout_3.addWidget(self.clip_check)
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("ScanData IO Manager")
+        self.setMinimumSize(1200, 800)
 
-        self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setObjectName('label_6')
-        self.smooth_check = QtGui.QCheckBox()
-        self.horizontalLayout_3.addWidget(self.label_6)
-        self.horizontalLayout_3.addWidget(self.smooth_check)
+        # ==== 위쪽: 경로 및 버튼 ====
+        self.path_label = QLabel(" 경로를 선택하세요")
+        self.select_button = QPushButton("Select")
+        self.load_button = QPushButton("Load")
 
-        self.label_2 = QtGui.QLabel(Dialog)
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_3.addWidget(self.label_2)
-        self.colorspace_combo = QtGui.QComboBox(Dialog)
-        self.colorspace_combo.setObjectName("colorspace_combo")
-        self.horizontalLayout_3.addWidget(self.colorspace_combo)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
-        self.seq_model_view = QtGui.QTableView(Dialog)
-        self.seq_model_view.setObjectName("seq_model_view")
-        self.verticalLayout.addWidget(self.seq_model_view)
-        self.horizontalLayout_4 = QtGui.QHBoxLayout()
-        self.horizontalLayout_4.setSpacing(0)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.excel_file_label = QtGui.QLabel(Dialog)
-        self.excel_file_label.setMinimumSize(QtCore.QSize(400, 0))
-        self.excel_file_label.setText("")
-        self.excel_file_label.setObjectName("excel_file_label")
-        self.horizontalLayout_4.addWidget(self.excel_file_label)
-        self.groupBox_2 = QtGui.QGroupBox(Dialog)
-        self.groupBox_2.setObjectName("groupBox_2")
-        self.horizontalLayout_5 = QtGui.QHBoxLayout(self.groupBox_2)
-        self.horizontalLayout_5.setSpacing(0)
-        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.save_excel = QtGui.QPushButton(self.groupBox_2)
-        self.save_excel.setObjectName("save_excel")
-        self.horizontalLayout_5.addWidget(self.save_excel)
-        self.edit_excel = QtGui.QPushButton(self.groupBox_2)
-        self.edit_excel.setObjectName("edit_excel")
-        self.horizontalLayout_5.addWidget(self.edit_excel)
-        self.horizontalLayout_4.addWidget(self.groupBox_2)
-        self.groupBox = QtGui.QGroupBox(Dialog)
-        self.groupBox.setObjectName("groupBox")
-        self.gridLayout = QtGui.QGridLayout(self.groupBox)
-        self.gridLayout.setSpacing(0)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout.setObjectName("gridLayout")
-        self.v_timecode = QtGui.QPushButton(self.groupBox)
-        self.v_timecode.setObjectName("v_timecode")
-        self.gridLayout.addWidget(self.v_timecode, 0, 0, 1, 1)
-        self.v_org = QtGui.QPushButton(self.groupBox)
-        self.v_org.setObjectName("v_org")
-        self.gridLayout.addWidget(self.v_org, 0, 1, 1, 1)
-        self.v_src = QtGui.QPushButton(self.groupBox)
-        self.v_src.setObjectName("v_src")
-        self.gridLayout.addWidget(self.v_src, 1, 0, 1, 1)
-        self.v_editor = QtGui.QPushButton(self.groupBox)
-        self.v_editor.setObjectName("v_editor")
-        self.gridLayout.addWidget(self.v_editor, 1, 1, 1, 1)
-        self.horizontalLayout_4.addWidget(self.groupBox)
-        self.groupBox_3 = QtGui.QGroupBox(Dialog)
-        self.groupBox_3.setObjectName("groupBox_3")
-        self.horizontalLayout_6 = QtGui.QHBoxLayout(self.groupBox_3)
-        self.horizontalLayout_6.setSpacing(0)
-        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.collect = QtGui.QPushButton(self.groupBox_3)
-        self.collect.setObjectName("collect")
-        self.horizontalLayout_6.addWidget(self.collect)
-        self.publish = QtGui.QPushButton(self.groupBox_3)
-        self.publish.setObjectName("publish")
-        self.horizontalLayout_6.addWidget(self.publish)
-        self.horizontalLayout_4.addWidget(self.groupBox_3)
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
+        path_layout = QHBoxLayout()
+        path_layout.addWidget(QLabel("Path:"))
+        path_layout.addWidget(self.path_label)
+        path_layout.addWidget(self.select_button)
+        path_layout.addWidget(self.load_button)
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        # ==== 중간: 테이블 ====
+        self.table = QTableWidget()
+        self.table.setColumnCount(7)
+        self.table.setHorizontalHeaderLabels([
+            "Check", "Thumbnail", "Roll", "Shot Name", "Version", "Type", "Path"
+        ])
 
-    def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "The Current Sgtk Environment", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("Dialog", "Path : ", None, QtGui.QApplication.UnicodeUTF8))
-        self.select_dir.setText(QtGui.QApplication.translate("Dialog", "Select", None, QtGui.QApplication.UnicodeUTF8))
-        self.create_excel.setText(QtGui.QApplication.translate("Dialog", "Load", None, QtGui.QApplication.UnicodeUTF8))
-        self.check_all_btn.setText(QtGui.QApplication.translate("Dialog", "Check All", None, QtGui.QApplication.UnicodeUTF8))
-        self.uncheck_all_btn.setText(QtGui.QApplication.translate("Dialog", "Uncheck All", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("Dialog", "Colorspace", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("Dialog", "MOV to DPX", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("Dialog", "Non Retime", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("Dialog", "ClipLib", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("Dialog", "Smooth Retime", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("Dialog", "Excel", None, QtGui.QApplication.UnicodeUTF8))
-        self.save_excel.setText(QtGui.QApplication.translate("Dialog", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.edit_excel.setText(QtGui.QApplication.translate("Dialog", "Edit", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("Dialog", "Validate", None, QtGui.QApplication.UnicodeUTF8))
-        self.v_timecode.setText(QtGui.QApplication.translate("Dialog", "Timecode", None, QtGui.QApplication.UnicodeUTF8))
-        self.v_org.setText(QtGui.QApplication.translate("Dialog", "Version", None, QtGui.QApplication.UnicodeUTF8))
-        self.v_src.setText(QtGui.QApplication.translate("Dialog", "Src Version", None, QtGui.QApplication.UnicodeUTF8))
-        self.v_editor.setText(QtGui.QApplication.translate("Dialog", "Shot for Editorial", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_3.setTitle(QtGui.QApplication.translate("Dialog", "Action", None, QtGui.QApplication.UnicodeUTF8))
-        self.collect.setText(QtGui.QApplication.translate("Dialog", "Collect", None, QtGui.QApplication.UnicodeUTF8))
-        self.publish.setText(QtGui.QApplication.translate("Dialog", "Publish", None, QtGui.QApplication.UnicodeUTF8))
+        # ==== 아래쪽: 액션 버튼 ====
+        self.save_button = QPushButton("Save Excel")
+
+        bottom_layout = QHBoxLayout()
+        bottom_layout.addWidget(self.save_button)
+
+
+        # 체크박스 모두 선택 / 해제 
+
+        self.toggle_select_button = QPushButton("모두 선택")
+        bottom_layout.addWidget(self.toggle_select_button)
+
+
+        # 엑셀 선택하여 샷그리드에 바로 업로드
+        self.register_excel_button = QPushButton("엑셀 선택 → ShotGrid 업로드")
+        bottom_layout.addWidget(self.register_excel_button)
+
+
+
+        # 프로젝트에 바로 뜨도록 하기 
+        self.project_label = QLabel("🔘 선택된 프로젝트: 없음")
+        bottom_layout.addWidget(self.project_label)
+
+
+        # 프로젝트 선택 UI
+        self.project_combo_label = QLabel("프로젝트 선택:")
+        self.project_combo = QComboBox()
+        # 초기화 시 기본값
+        self.project_combo.addItem("ShotGrid 프로젝트 불러오는 중...")
+
+        # 위쪽레이아웃에 추가
+        top_layout = QHBoxLayout()
+        top_layout.addWidget(self.project_combo_label)
+        top_layout.addWidget(self.project_combo)
+
+        # ==== 전체 레이아웃 ====
+        layout = QVBoxLayout()
+        layout.addLayout(top_layout)
+        layout.addLayout(path_layout)
+        layout.addWidget(self.table)
+        layout.addLayout(bottom_layout)
+        self.setLayout(layout)
+
+    def set_path(self, path):
+        self.path_label.setText(path)
+
+    def add_table_row(self, data, row=None):
+        if row is None:
+            row = self.table.rowCount()
+        self.table.insertRow(row)
+
+        # CheckBox
+        checkbox = QCheckBox()
+        self.table.setCellWidget(row, 0, checkbox)
+
+        # 썸네일 셀 (예시)
+        thumb_label = QLabel()
+        pixmap = QPixmap(data["thumbnail"])
+        if not pixmap.isNull():
+            thumb_label.setPixmap(pixmap.scaled(100, 60))
+            thumb_label.setToolTip(data["thumbnail"])
+        else:
+            thumb_label.setText("❌")
+        self.table.setCellWidget(row, 1, thumb_label)
+        thumb_label.setToolTip(data["thumbnail"]) 
+
+        # 나머지 데이터
+        self.table.setItem(row, 2, QTableWidgetItem(data["roll"]))
+        self.table.setItem(row, 3, QTableWidgetItem(data["shot_name"]))
+        self.table.setItem(row, 4, QTableWidgetItem(data["version"]))
+        self.table.setItem(row, 5, QTableWidgetItem(data["type"]))
+        self.table.setItem(row, 6, QTableWidgetItem(data["path"]))
 
 from . import resources_rc
