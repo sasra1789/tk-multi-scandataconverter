@@ -12,15 +12,29 @@
 #     QHBoxLayout, QFileDialog, QTableWidgetItem, QCheckBox, QComboBox
 # )
 # from sgtk.platform.qt import QPixmap
-import os
 
-from sgtk.platform.qt import QtCore, QtGui
+from tank.platform.qt import QtCore
+for name, cls in QtCore.__dict__.items():
+    if isinstance(cls, type): globals()[name] = cls
+
+from tank.platform.qt import QtGui
+for name, cls in QtGui.__dict__.items():
+    if isinstance(cls, type): globals()[name] = cls
+    
+from  . import resources_rc
+
+
+
 
 class Ui_Dialog(object):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("ScanData IO Manager")
-        self.setMinimumSize(1200, 800)
+    # def __init__(self):
+    def setupUi(self, Dialog):
+
+        Dialog.setWindowTitle("ScanData Converter")
+        Dialog.resize(1200, 800)
+        # super().__init__()
+        # self.setWindowTitle("ScanData IO Manager")
+        # self.setMinimumSize(1200, 800)
 
         # ==== 위쪽: 경로 및 버튼 ====
         self.path_label = QtGui.QLabel(" 경로를 선택하세요")
@@ -113,4 +127,3 @@ class Ui_Dialog(object):
         self.table.setItem(row, 5, QtGui.QTableWidgetItem(data["type"]))
         self.table.setItem(row, 6, QtGui.QTableWidgetItem(data["path"]))
 
-from . import resources_rc

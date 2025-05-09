@@ -2,7 +2,7 @@
 
 import sys
 from sgtk.platform.qt import QtCore, QtGui
-from .controller import Controller
+# from .controller import Controller
 # from .main_window import MainWindow
 from .dialog import AppDialog
 from .ui.dialog import Ui_Dialog #메인 윈도우 

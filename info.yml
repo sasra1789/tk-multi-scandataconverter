@@ -39,9 +39,9 @@ description: Converts scan data and registers to ShotGrid
 configuration:
 
 requires_shotgun_version:
-requires_core_version: "v0.18.0"
+requires_core_version: 
 
-supported_engines: [tk-desktop]
+supported_engines: 
 
 python_path: python
 # python_path: python # 반드시 필요함 

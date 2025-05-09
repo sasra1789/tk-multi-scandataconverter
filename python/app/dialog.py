@@ -35,7 +35,7 @@ from .ui.dialog import Ui_Dialog
 logger = sgtk.platform.get_logger(__name__)
 
 
-def show_dialog(app):
+def show_dialog(app_instance):
     """
     Shows the main dialog window.
     """
@@ -46,13 +46,14 @@ def show_dialog(app):
     # # we pass the dialog class to this method and leave the actual construction
     # # to be carried out by toolkit.
     # app_instance.engine.show_dialog("SScandata converter", app_instance, AppDialog)
-    # # app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
+    app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
 
     # 여러 번 열리지 않도록
     # app.engine.show_dialog("Launching ScanData Converter...")
     # dialog = app.engine.show_dialog("ScanData Converter", app, AppDialog)
-    dialog = app.engine.show_dialog("ScanData Converter", app, Ui_Dialog)
-    AppDialog(dialog)  # UI에 컨트롤러 연결
+   
+    # dialog = app.engine.show_dialog("ScanData Converter", app, AppDialog)
+    # AppDialog(dialog)  # UI에 컨트롤러 연결
 
 class AppDialog(QtGui.QWidget):
     """
@@ -60,10 +61,30 @@ class AppDialog(QtGui.QWidget):
     """
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self)
+
+
+        # now load in the UI that was created in the UI designer
+        self.main_window = Ui_Dialog()
+        self.main_window.setupUi(self)
+        # most of the useful accessors are available through the Application class instance
+        # it is often handy to keep a reference to this. You can get it via the following method:
+        self._app = sgtk.platform.current_bundle()
+
+        # logging happens via a standard toolkit logger
+        logger.info("Launching Scandata Converter Application...")
+
+        # via the self._app handle we can for example access:
+        # - The engine, via self._app.engine
+        # - A Shotgun API instance, via self._app.shotgun
+        # - An Sgtk API instance, via self._app.sgtk
+
+        # lastly, set up our very basic UI
+        self.ui.context.setText("Current Context: %s" % self._app.context)
+
         super(AppDialog, self).__init__(parent)
 
         # self.main_window =Ui_Dialog()
-        self.main_window = Ui_Dialog()
+
         self.folder_path = ""  # 선택된 경로 저장
         self.thumb_cache_dir = "/home/rapa/show"  # 썸네일 저장 위치 위치는 나중에 바꿔주기
     
@@ -525,6 +546,7 @@ class AppDialog(QtGui.QWidget):
         else:
             self.main_window.project_label.setText("🛑 선택된 프로젝트: 없음")
 
+    
 
     # def __init__(self):
     #     """

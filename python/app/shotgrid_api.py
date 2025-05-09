@@ -2,9 +2,9 @@ from shotgun_api3 import Shotgun
 import os
 
 def connect_to_shotgrid():
-    SERVER_PATH = "https://ww5th.shotgrid.autodesk.com"
-    SCRIPT_NAME = "serin_api"         # 너가 만든 이름
-    SCRIPT_KEY = "ih)kae8wxibufuLwjfwxnypey"  # 생성된 API 키
+    SERVER_PATH = "https://westworld5th.shotgrid.autodesk.com"
+    SCRIPT_NAME = "serin"         # 너가 만든 이름
+    SCRIPT_KEY = "xdogqszeijwe%choirXeajv1c"  # 생성된 API 키
 
     sg = Shotgun(SERVER_PATH, SCRIPT_NAME, SCRIPT_KEY)
     print(" ShotGrid 로그인 성공!")
