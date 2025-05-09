@@ -14,9 +14,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QPixmap
 import os
 
-from tank.platform.qt import QtCore, QtGui
+# from tank.platform.qt import QtCore, QtGui
 
-class Ui_Dialog(object):
+class Ui_Dialog(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("ScanData IO Manager")
@@ -113,4 +113,4 @@ class Ui_Dialog(object):
         self.table.setItem(row, 5, QTableWidgetItem(data["type"]))
         self.table.setItem(row, 6, QTableWidgetItem(data["path"]))
 
-from . import resources_rc
+# from . import resources_rc
