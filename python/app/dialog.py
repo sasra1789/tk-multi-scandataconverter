@@ -38,18 +38,29 @@ def show_dialog(app_instance):
     """
     Shows the main dialog window.
     """
+    #디버깅
+    sg = connect_to_shotgrid()
+    projects = list_projects(sg)
+
+    class AppDialogWrapper(AppDialog):
+        def __init__(self, parent=None):
+            super(AppDialogWrapper, self).__init__(projects=projects, parent=parent)
+
+    # ✅ tk-desktop 엔진은 show_dialog만 가능하므로 클래스 전달 방식 유지
+    app_instance.engine.show_dialog("Scan Data Converter", app_instance, AppDialogWrapper)
+
     # # in order to handle UIs seamlessly, each toolkit engine has methods for launching
     # # different types of windows. By using these methods, your windows will be correctly
     # # decorated and handled in a consistent fashion by the system.
 
-    app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
+    # app_instance.engine.show_dialog("Start scandata converter", app_instance, AppDialog)
 
 
 class AppDialog(QtGui.QWidget):
     """
     Main application dialog window
     """
-    def __init__(self):
+    def __init__(self, projects=None, parent=None):
         QtGui.QWidget.__init__(self)
 
 
@@ -57,6 +68,20 @@ class AppDialog(QtGui.QWidget):
         self.main_window = Ui_Dialog() # UI띄우기위해 dialog 호출
         self.main_window.setupUi(self) # 떠야하는데.. 안뜸
         
+        #오구디버깅
+        # projects를 생성자에서 받기
+        self.projects = projects or []
+
+        self.project_combo = self.main_window.project_combo
+
+        # 콤보박스에 값 채우기
+        self.project_combo.clear()
+        for p in self.projects:
+            self.project_combo.addItem(p["name"])
+
+        #
+
+
         # most of the useful accessors are available through the Application class instance
         # it is often handy to keep a reference to this. You can get it via the following method:
         self._app = sgtk.platform.current_bundle()
