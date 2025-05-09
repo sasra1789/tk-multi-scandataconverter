@@ -9,6 +9,7 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 import os
 
+#UI와 기능 연결
 
 from .scanfile_handler import find_plate_files
 from .converter import generate_mov_thumbnail, convert_exr_to_jpg_with_ffmpeg,  convert_to_mp4, convert_to_webm, generate_montage_multi, find_thumbnail_from_montage,  list_excel_versions
@@ -59,13 +60,14 @@ class AppDialog(QtGui.QWidget):
     """
     Main application dialog window
     """
-    def __init__(self, parent=None):
+    def __init__(self):
         QtGui.QWidget.__init__(self)
 
 
         # now load in the UI that was created in the UI designer
-        self.main_window = Ui_Dialog()
-        self.main_window.setupUi(self)
+        self.main_window = Ui_Dialog() # UI띄우기위해 dialog 호출
+        self.main_window.setupUi(self) # 떠야하는데.. 안뜸
+        
         # most of the useful accessors are available through the Application class instance
         # it is often handy to keep a reference to this. You can get it via the following method:
         self._app = sgtk.platform.current_bundle()
@@ -79,9 +81,9 @@ class AppDialog(QtGui.QWidget):
         # - An Sgtk API instance, via self._app.sgtk
 
         # lastly, set up our very basic UI
-        self.ui.context.setText("Current Context: %s" % self._app.context)
+        # self.ui.context.setText("Current Context: %s" % self._app.context)
 
-        super(AppDialog, self).__init__(parent)
+        # super(AppDialog, self).__init__(parent)
 
         # self.main_window =Ui_Dialog()
 

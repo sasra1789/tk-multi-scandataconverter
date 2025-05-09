@@ -33,7 +33,6 @@ class SgtkStarterApp(Application):
         # now register the command with the engine
             self.engine.register_command("Scandata Converter", menu_callback)
         except Exception:
-            import traceback
             traceback.print_exc()
 
 #     def init_app(self):

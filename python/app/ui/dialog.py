@@ -95,7 +95,8 @@ class Ui_Dialog(object):
         layout.addLayout(path_layout)
         layout.addWidget(self.table)
         layout.addLayout(bottom_layout)
-        self.setLayout(layout)
+        # self.setLayout(layout)
+        Dialog.setLayout(layout)  # 이게 문제였음
 
     def set_path(self, path):
         self.path_label.setText(path)
