@@ -46,7 +46,7 @@ def show_dialog(app_instance):
         def __init__(self, parent=None):
             super(AppDialogWrapper, self).__init__(projects=projects, parent=parent)
 
-    # ✅ tk-desktop 엔진은 show_dialog만 가능하므로 클래스 전달 방식 유지
+    #  tk-desktop 엔진은 show_dialog만 가능하므로 클래스 전달 방식 유지
     app_instance.engine.show_dialog("Scan Data Converter", app_instance, AppDialogWrapper)
 
     # # in order to handle UIs seamlessly, each toolkit engine has methods for launching
@@ -221,7 +221,8 @@ class AppDialog(QtGui.QWidget):
 
         #  사용자에게 파일 선택 받기
         file_name, ok = QtGui.QInputDialog.getItem(
-            self.main_window,
+            # self.main_window,
+            self,
             "엑셀 버전 선택",
             "샷그리드에 업로드할 엑셀 파일을 선택하세요:",
             excel_files,
@@ -293,7 +294,8 @@ class AppDialog(QtGui.QWidget):
         # 폴더 선택 다이얼로그 열기
         scan_root = f"/home/rapa/show/{project_name}/product/scan"
         selected_folder = QtGui.QFileDialog.getExistingDirectory(
-            self.main_window,
+            # self.main_window,
+            self,
             "날짜 폴더 선택",
             scan_root
         )
@@ -425,7 +427,8 @@ class AppDialog(QtGui.QWidget):
         # 샷 폴더 선택
         scan_root = f"/home/rapa/show/{project_name}/product/scan"
         selected_folder = QtGui.QFileDialog.getExistingDirectory(
-            self.main_window,
+            # self.main_window,
+            self,
             "샷 폴더 선택 (scanlist 있는 폴더)",
             scan_root
         )
