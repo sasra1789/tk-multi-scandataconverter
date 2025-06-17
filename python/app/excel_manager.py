@@ -34,10 +34,15 @@ def save_to_excel_with_thumbnails(data_list, save_path):
     ws.title = "Scan Data"
 
     #  헤더 정의 (썸네일 경로 포함)
-    headers = ["Thumbnail", "Roll", "Shot Name", "Version", "Type", "Path", "Thumbnail Path"]
+    headers = ["Thumbnail", "Roll", "Shot Name", "Version", "Type", "Path", "Thumbnail Path",
+               "Scan Name", "Camera", "Timecode" ]
     ws.append(headers)
 
     for item in data_list:
+        #  메타데이터 항목 추출
+        scan_name = item.get("scan_name", "")
+        camera = item.get("camera", "")
+        timecode = item.get("timecode", "")
         # 텍스트 항목 먼저 삽입
         row = [
             "",  # Thumbnail 이미지 삽입 위치
@@ -47,6 +52,7 @@ def save_to_excel_with_thumbnails(data_list, save_path):
             item.get("type", ""),
             item.get("path", ""),
             item.get("thumbnail", ""),  # 썸네일 경로도 저장
+            scan_name, camera, timecode 
         ]
         ws.append(row)
 
@@ -61,11 +67,11 @@ def save_to_excel_with_thumbnails(data_list, save_path):
                 ws.add_image(img, cell)
                 ws.row_dimensions[ws.max_row].height = 45
             except Exception as e:
-                print(f"❌ 이미지 삽입 실패: {img_path}\n{e}")
+                print(f"❌ Failed to insert image: {img_path}\n{e}")
 
     # 저장
     wb.save(save_path)
-    print(f" 엑셀 저장 완료: {save_path}")
+    print(f" ✔ Excel file saved: {save_path}")
 
 def load_excel_data(xlsx_path):
     """

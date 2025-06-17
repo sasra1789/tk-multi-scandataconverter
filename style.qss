@@ -18,3 +18,20 @@ QListView, QTableView, QScrollArea {
 }
 
 */
+
+
+/* style.qss */
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+}
+QCheckBox::indicator:unchecked {
+    background-color: white;
+    border: 1px solid gray;
+}
+QCheckBox::indicator:checked {
+    background-color: black;
+    image: url(:/qt-project.org/styles/commonstyle/images/checkbox_checked.png);
+}
+

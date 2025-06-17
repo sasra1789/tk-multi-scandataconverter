@@ -7,16 +7,7 @@ from sgtk.platform.qt import QtCore, QtGui
 from .dialog import AppDialog
 from .ui.dialog import Ui_Dialog #메인 윈도우 
 
-# from tank.platform.qt import QApplication, QWidget
-# def main():
-#     print(" io_main.py 내부의 main() 함수가 실행되었습니다.")
 
-#     app = QApplication(sys.argv)
-        
-#     controller = Controller()  # 컨트롤러가 UI와 로직을 묶어줌
-#     controller.show_main_window()
-        
-#     sys.exit(app.exec())
 
 def main():
     print(" io_main.py 내부의 main() 함수가 실행되었습니다.")

@@ -17,7 +17,7 @@ class MainWindow(QtGui.QWidget):
         self.setMinimumSize(1200, 800)
 
         # ==== 위쪽: 경로 및 버튼 ====
-        self.path_label = QLabel(" 경로를 선택하세요")
+        self.path_label = QLabel(" Choose Path")
         self.select_button = QPushButton("Select")
         self.load_button = QPushButton("Load")
 
@@ -29,9 +29,10 @@ class MainWindow(QtGui.QWidget):
 
         # ==== 중간: 테이블 ====
         self.table = QTableWidget()
-        self.table.setColumnCount(7)
+        self.table.setColumnCount(10)
         self.table.setHorizontalHeaderLabels([
             "Check", "Thumbnail", "Roll", "Shot Name", "Version", "Type", "Path"
+            , "Scan Name", "Camera", "Timecode"
         ])
 
         # ==== 아래쪽: 액션 버튼 ====
@@ -43,31 +44,31 @@ class MainWindow(QtGui.QWidget):
 
         # 체크박스 모두 선택 / 해제 
 
-        self.toggle_select_button = QPushButton("모두 선택")
+        self.toggle_select_button = QPushButton("All Select")
         bottom_layout.addWidget(self.toggle_select_button)
 
 
         # 엑셀 선택하여 샷그리드에 바로 업로드
-        self.register_excel_button = QPushButton("엑셀 선택 → ShotGrid 업로드")
+        self.register_excel_button = QPushButton("Select Excel → ShotGrid Upload")
         bottom_layout.addWidget(self.register_excel_button)
 
 
 
         # 프로젝트에 바로 뜨도록 하기 
-        self.project_label = QLabel("🔘 선택된 프로젝트: 없음")
+        self.project_label = QLabel("🔘 Selected Project: None")
         bottom_layout.addWidget(self.project_label)
 
 
-        # 프로젝트 선택 UI
-        self.project_combo_label = QLabel("프로젝트 선택:")
-        self.project_combo = QComboBox()
-        # 초기화 시 기본값
-        self.project_combo.addItem("ShotGrid 프로젝트 불러오는 중...")
+        # # 프로젝트 선택 UI
+        # self.project_combo_label = QLabel("프로젝트 선택:")
+        # self.project_combo = QComboBox()
+        # # 초기화 시 기본값
+        # self.project_combo.addItem("ShotGrid 프로젝트 불러오는 중...")
 
         # 위쪽레이아웃에 추가
         top_layout = QHBoxLayout()
-        top_layout.addWidget(self.project_combo_label)
-        top_layout.addWidget(self.project_combo)
+        # top_layout.addWidget(self.project_combo_label)
+        # top_layout.addWidget(self.project_combo)
 
         # ==== 전체 레이아웃 ====
         layout = QVBoxLayout()
@@ -87,6 +88,20 @@ class MainWindow(QtGui.QWidget):
 
         # CheckBox
         checkbox = QCheckBox()
+        checkbox.setStyleSheet("""
+        QCheckBox::indicator {
+            width: 16px;
+            height: 16px;
+        }
+        QCheckBox::indicator:unchecked {
+            background-color: white;
+            border: 1px solid gray;
+        }
+        QCheckBox::indicator:checked {
+            background-color: white;
+            image: url(:/qt-project.org/styles/commonstyle/images/checkbox_checked.png);
+        }
+    """)
         self.table.setCellWidget(row, 0, checkbox)
 
         # 썸네일 셀 (예시)

@@ -41,7 +41,7 @@ def convert_exr_to_jpg_with_ffmpeg(exr_path, output_path):
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return True
     except Exception as e:
-        print(f"[ffmpeg 변환 실패] {exr_path} → {output_path}\n{e}")
+        print(f"[Failed to convert ffmpeg] {exr_path} → {output_path}\n{e}")
         return False
     
 #  .mov만 썸네일 따로 생성 
@@ -72,7 +72,7 @@ def generate_mov_thumbnail(mov_path, output_dir):
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return thumb_path
     except subprocess.CalledProcessError:
-        print(f"[에러] 썸네일 생성 실패: {mov_path}")
+        print(f"[error] Failed to generate thumbnail: {mov_path}")
         return None
     
 
@@ -99,7 +99,7 @@ def convert_to_webm(input_path, output_path):
         "-c:a", "libopus",
         output_path
     ]
-    print ("webm 변환 성공")
+    print ("Successfully converted to webm")
     return subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
 
 def generate_montage(input_path, output_path):
@@ -111,7 +111,7 @@ def generate_montage(input_path, output_path):
         output_path
     ]
 
-    print("montage 변환 성공")
+    print("Successfully converted to montage")
     return subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
 
 
@@ -119,7 +119,7 @@ def generate_montage(input_path, output_path):
 def find_thumbnail_from_montage(dir_path):
     print(f"[DEBUG] dir_path = {dir_path}")
     if not os.path.exists(dir_path):
-        print(f"[ERROR] ❌ 디렉토리가 존재하지 않음: {dir_path}")
+        print(f"[ERROR] ❌ Dir does not exist: {dir_path}")
         return None
 
     files = sorted([
@@ -128,7 +128,7 @@ def find_thumbnail_from_montage(dir_path):
     ])
 
     if not files:
-        print(f"[ERROR] ❌ JPG 파일 없음 in: {dir_path}")
+        print(f"[ERROR] ❌ There is no jpg File in: {dir_path}")
         return None
 
     print(f"[찾은 썸네일] {files[0]}")

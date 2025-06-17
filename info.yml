@@ -33,8 +33,8 @@
 # frameworks:
 
 
-name: tk-multi-scandataconverter
-display_name: ScanData Converter
+name: tk-multi-scandataconverter2
+display_name: ScanData Converter2
 description: Converts scan data and registers to ShotGrid
 configuration:
 

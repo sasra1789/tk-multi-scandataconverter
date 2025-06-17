@@ -13,6 +13,7 @@
 # )
 # from sgtk.platform.qt import QPixmap
 
+# 이것도 맞음 대체 뭐지  
 from tank.platform.qt import QtCore
 for name, cls in QtCore.__dict__.items():
     if isinstance(cls, type): globals()[name] = cls
@@ -30,7 +31,7 @@ class Ui_Dialog(object):
     # def __init__(self):
     def setupUi(self, Dialog):
 
-        Dialog.setWindowTitle("ScanData Converter")
+        Dialog.setWindowTitle("ScanData Converter2")
         Dialog.resize(1200, 800)
         # super().__init__()
         # self.setWindowTitle("ScanData IO Manager")
@@ -51,7 +52,8 @@ class Ui_Dialog(object):
         self.table = QtGui.QTableWidget()
         self.table.setColumnCount(7)
         self.table.setHorizontalHeaderLabels([
-            "Check", "Thumbnail", "Roll", "Shot Name", "Version", "Type", "Path"
+            "Check", "Thumbnail", "Roll", "Shot Name", "Version", "Type", "Path",
+             "Scan Name", "Camera", "Timecode"
         ])
 
         # ==== 아래쪽: 액션 버튼 ====
@@ -63,7 +65,7 @@ class Ui_Dialog(object):
 
         # 체크박스 모두 선택 / 해제 
 
-        self.toggle_select_button = QtGui.QPushButton("모두 선택")
+        self.toggle_select_button = QtGui.QPushButton("All Select")
         bottom_layout.addWidget(self.toggle_select_button)
 
 
@@ -74,24 +76,24 @@ class Ui_Dialog(object):
 
 
         # 프로젝트에 바로 뜨도록 하기 
-        self.project_label = QtGui.QLabel("🔘 선택된 프로젝트: 없음")
+        self.project_label = QtGui.QLabel("🔘 Selected Project = Iron Man ")
         bottom_layout.addWidget(self.project_label)
 
 
-        # 프로젝트 선택 UI
-        self.project_combo_label = QtGui.QLabel("프로젝트 선택:")
-        self.project_combo = QtGui.QComboBox()
-        # 초기화 시 기본값
-        self.project_combo.addItem("ShotGrid 프로젝트 불러오는 중...")
+        # # 프로젝트 선택 UI
+        # self.project_combo_label = QtGui.QLabel("프로젝트 선택:")
+        # self.project_combo = QtGui.QComboBox()
+        # # 초기화 시 기본값
+        # self.project_combo.addItem("ShotGrid 프로젝트 불러오는 중...")
 
-        # 위쪽레이아웃에 추가
-        top_layout = QtGui.QHBoxLayout()
-        top_layout.addWidget(self.project_combo_label)
-        top_layout.addWidget(self.project_combo)
+        # # 위쪽레이아웃에 추가
+        # top_layout = QtGui.QHBoxLayout()
+        # top_layout.addWidget(self.project_combo_label)
+        # top_layout.addWidget(self.project_combo)
 
         # ==== 전체 레이아웃 ====
         layout = QtGui.QVBoxLayout()
-        layout.addLayout(top_layout)
+        # layout.addLayout(top_layout)
         layout.addLayout(path_layout)
         layout.addWidget(self.table)
         layout.addLayout(bottom_layout)

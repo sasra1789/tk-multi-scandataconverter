@@ -11,6 +11,10 @@ from .shotgrid_api import connect_to_shotgrid, find_shot, create_version, create
 import shutil
 from sgtk.platform.qt import QInputDialog, QFileDialog, QMessageBox
 
+import sgtk
+tk = sgtk.sgtk_from_path(os.getcwd())
+sg = tk.shotgun
+context = tk.context_from_path(os.getcwd())
 
 
 class Controller:
@@ -23,7 +27,7 @@ class Controller:
 
     def show_main_window(self):
         self.load_shotgrid_projects()
-        self.main_window.show()
+        self.main_window.show() # 이거 없애도 될 듯 
 
 
     #버튼 연결
@@ -32,7 +36,7 @@ class Controller:
         self.main_window.load_button.clicked.connect(self.on_load_files)
         self.main_window.save_button.clicked.connect(self.on_save_excel)
         self.main_window.register_excel_button.clicked.connect(self.on_register_to_shotgrid)
-        self.main_window.project_combo.currentTextChanged.connect(self.update_project_label)
+        # self.main_window.project_combo.currentTextChanged.connect(self.update_project_label)
 
         #모든 선택/해제버튼 하나의 토글 버튼만 연결
         self.select_all_checked = False
@@ -41,9 +45,9 @@ class Controller:
     
     def on_select_folder(self):
         from PySide6.QtWidgets import QFileDialog
-        folder = QFileDialog.getExistingDirectory(self.main_window, "날짜 폴더 선택")
+        folder = QFileDialog.getExistingDirectory(self.main_window, "Select the date folder")
         if not folder:
-            print("X 경로 선택 안됨")
+            print("X Path is not selected.")
             return
 
         self.folder_path = folder
@@ -62,7 +66,7 @@ class Controller:
         # 기존 데이터는 유지하고 새롭게 아래에 추가하기 
         
         if not self.folder_path:
-            print(" 폴더가 선택되지 않았습니다.")
+            print(" Folder is not selected.")
             return
         
         base_row = self.main_window.table.rowCount()
@@ -128,24 +132,24 @@ class Controller:
         excel_files = list_excel_versions(excel_dir)
 
         if not excel_files:
-            print("X 저장된 엑셀 파일이 없습니다.")
+            print("X There is no selected Excel file.")
             return None
 
         #  사용자에게 파일 선택 받기
         file_name, ok = QInputDialog.getItem(
             self.main_window,
-            "엑셀 버전 선택",
-            "샷그리드에 업로드할 엑셀 파일을 선택하세요:",
+            "Select Excel File version",
+            " Select the Excel file to upload to ShotGrid:",
             excel_files,
             editable=False
         )
 
         if ok and file_name:
             selected_path = os.path.join(excel_dir, file_name)
-            print(f" 선택된파일: {selected_path}")
+            print(f" Selected File : {selected_path}")
             return selected_path
         else:
-            print("⚠️ 선택 취소됨")
+            print("⚠️ Selection canceled.")
             return None
 
 
@@ -153,7 +157,7 @@ class Controller:
     def on_save_excel(self):
 
         if self.main_window.table.rowCount() == 0:
-            print("⚠️ 테이블에 데이터가 없습니다.")
+            print("⚠️ There is no data in the table.")
             return
 
         
@@ -179,42 +183,46 @@ class Controller:
                 "shot_name": safe_text(3),
                 "version": safe_text(4),
                 "type": safe_text(5),
-                "path": safe_text(6),
+                "path": safe_text(6)
+                
             })
             
 
         
         # 모두 체크 안될 경우 
         if not data_list:
-            print("⚠️ 체크된 항목이 없습니다. 엑셀 저장을 취소합니다.")
+            print("⚠️ There is no checked item. Excel saving has been canceled.")
             from sgtk.platform.qt import QMessageBox
-            QMessageBox.warning(self.main_window, "경고", "✔ 체크된 항목이 없습니다.")
+            QMessageBox.warning(self.main_window, "caution", "✔ There is no checked item. Excel saving has been canceled.")
             return
 
 
         # 에라모르겠다
 
         # project_name 먼저 가져오기
-        project = self.get_selected_project()
+        # project = self.get_selected_project()
+        project = self.context.project
+
         if not project:
-            print("⚠️ 프로젝트가 선택되지 않았습니다.")
-            QMessageBox.warning(self.main_window, "오류", "프로젝트가 선택되지 않았습니다.")
+            print("⚠️ Project is not selected.")
+            QMessageBox.warning(self.main_window, "error", "Project is not selected.")
             return
         project_name = project["name"]
+        self.project_label = QLabel(f"🔘 Project: {project_name}")
 
         # 폴더 선택 다이얼로그 열기
         scan_root = f"/home/rapa/show/{project_name}/product/scan"
         selected_folder = QFileDialog.getExistingDirectory(
             self.main_window,
-            "날짜 폴더 선택",
+            "Select Date Folder (folder with scanlist)",
             scan_root
         )
     
         if not selected_folder:
-            print("⚠️ 폴더 선택이 취소되었습니다.")
+            print("⚠️ Folder selection has been canceled.")
             return
         
-        print(f"선택된 폴더: {selected_folder}")
+        print(f"selected folder: {selected_folder}")
 
         # 선택된 폴더 경로 분석
         parts = selected_folder.split("/")
@@ -222,10 +230,10 @@ class Controller:
             scan_date_folder = parts[-2]  # 날짜폴더명
             shot_folder_name = parts[-1]  # 샷폴더명
         except IndexError:
-            QMessageBox.warning(self.main_window, "오류", "선택한 폴더 구조가 올바르지 않습니다.")
+            QMessageBox.warning(self.main_window, "error", "The selected folder is invalid.")
             return
 
-        print(f" 선택한 날짜: {scan_date_folder}, 샷 폴더명: {shot_folder_name}")
+        print(f" Selected Date: {scan_date_folder}, Shot Folder name : {shot_folder_name}")
 
         # 저장 경로: 자동 버전 증가된 .xlsx 파일 생성
         # 기존 build_excel_save_path 호출 대신:
@@ -233,11 +241,11 @@ class Controller:
         save_path = get_next_versioned_filename(save_base)
         #  엑셀로 저장 (썸네일 포함)
         save_to_excel_with_thumbnails(data_list, save_path)
-        print(f" 엑셀 저장 완료: {save_path}")
+        print(f" Excel save completed: {save_path}")
 
     def on_collect(self):
         if not self.folder_path:
-            print(" 경로가 지정되지 않았습니다.")
+            print(" The path is not specified.")
             return
 
         for row in range(self.main_window.table.rowCount()):
@@ -250,9 +258,10 @@ class Controller:
             # 썸네일 위젯에서 jpg 경로 추출 (toolTip에 저장해두었다면)
             thumb_label = self.main_window.table.cellWidget(row, 1)
             thumb_path = thumb_label.toolTip() if thumb_label else None
-            project = self.get_selected_project()
-            if not project:
-                print(" 프로젝트가 선택되지 않았습니다.")
+            project = self.context.project
+            project_name = project["name"]
+            if not project_name
+                print(" Project is not selected.")
                 return
 
             base_dir = f"/home/rapa/show/{project['name']}"
@@ -312,7 +321,7 @@ class Controller:
                 print(f"  WebM    : {'O' if webm_ok else 'X'} → {webm_path}")
                 print(f"  Montage : {'O' if montage_ok else 'X'} → {montage_path}")
             else:
-                print(f" {shot} → 변환할 MOV/MP4/EXR 파일이 org 폴더에 없습니다.")
+                print(f" {shot} → The MOV/MP4/EXR files to be converted are not in the org folder")
 
         #샷그리드
 
@@ -320,9 +329,10 @@ class Controller:
 
 
         # 프로젝트 선택
-        project = self.get_selected_project()
+        # project = self.get_selected_project()
+        project = self.context.project
         if not project:
-            QMessageBox.warning(self.main_window, "오류", "프로젝트가 선택되지 않았습니다.")
+            QMessageBox.warning(self.main_window, "error", "Project is not selected.")
             return
         project_name = project["name"]
 
@@ -330,25 +340,25 @@ class Controller:
         scan_root = f"/home/rapa/show/{project_name}/product/scan"
         selected_folder = QFileDialog.getExistingDirectory(
             self.main_window,
-            "샷 폴더 선택 (scanlist 있는 폴더)",
+            "Select shot folder (folder with scanlist)",
             scan_root
         )
 
         if not selected_folder:
-            print(" 폴더 선택이 취소되었습니다.")
+            print(" Folder selection has been canceled.")
             return
 
         #  선택한 폴더에서 scanlist 엑셀 자동 찾기
         excel_files = [f for f in os.listdir(selected_folder) if f.startswith("scanlist") and f.endswith(".xlsx")]
         if not excel_files:
-            QMessageBox.warning(self.main_window, "오류", "선택한 폴더에 scanlist 엑셀이 없습니다.")
+            QMessageBox.warning(self.main_window, "error", "There is no scanlist excel in the selected folder.")
             return
 
         #  가장 최신 버전 엑셀 사용
         excel_files.sort()
         excel_path = os.path.join(selected_folder, excel_files[-1])
 
-        print(f" 선택된 엑셀 파일: {excel_path}")
+        print(f" Select Excel: {excel_path}")
 
         # 4 0n_collect 호출
         self.on_collect()
@@ -362,9 +372,10 @@ class Controller:
             type_ = data["Type"]
 
             # 현재 선택된 프로젝트 기준으로 직접 경로 재구성
-            selected_project = self.get_selected_project()
+            # selected_project = self.get_selected_project()
+            selected_project = self.context.project
             if not selected_project:
-                print("X 프로젝트가 선택되지 않았습니다.")
+                print("X Project is not selected.")
                 return
             project_name = selected_project["name"]
 
@@ -392,56 +403,68 @@ class Controller:
             )
 
         
-    #UI 내 프로젝트 선택함수
-    def select_project(self):
-        sg = connect_to_shotgrid()
-        projects = list_projects(sg)
-        project_names = [p["name"] for p in projects]
+    # #UI 내 프로젝트 선택함수
+    # def select_project(self):
+    #     sg = connect_to_shotgrid()
+    #     projects = list_projects(sg)
+    #     project_names = [p["name"] for p in projects]
 
-        project_name, ok = QInputDialog.getItem(
-            self.main_window,
-            "프로젝트 선택",
-            "ShotGrid 프로젝트를 선택하세요:",
-            project_names,
-            editable=False
-        )
+    #     project_name, ok = QInputDialog.getItem(
+    #         self.main_window,
+    #         "프로젝트 선택",
+    #         "ShotGrid 프로젝트를 선택하세요:",
+    #         project_names,
+    #         editable=False
+    #     )
 
-        if ok and project_name:
-            selected = next(p for p in projects if p["name"] == project_name)
-            # 라벨에 표시
-            self.main_window.project_label.setText(f"🔘 선택된 프로젝트: {project_name}")
-            return selected
-        else:
-            self.main_window.project_label.setText(f"🛑 선택된 프로젝트: 없음")
-            return None
+    #     if ok and project_name:
+    #         selected = next(p for p in projects if p["name"] == project_name)
+    #         # 라벨에 표시
+    #         self.main_window.project_label.setText(f"🔘 Selected Project: {project_name}")
+    #         return selected
+    #     else:
+    #         self.main_window.project_label.setText(f"🛑 Selected Project: None ")
+    #         return None
         
 
-    # 프로젝트에 불러와 콤보박스 세팅
-    def load_shotgrid_projects(self):
-        sg = connect_to_shotgrid()
-        self.projects = list_projects(sg)
+    # # 프로젝트에 불러와 콤보박스 세팅
+    # def load_shotgrid_projects(self):
+    #     sg = connect_to_shotgrid()
+    #     self.projects = list_projects(sg)
 
-        self.main_window.project_combo.clear()
-        for project in self.projects:
-            self.main_window.project_combo.addItem(project["name"])
+    #     self.main_window.project_combo.clear()
+    #     for project in self.projects:
+    #         self.main_window.project_combo.addItem(project["name"])
 
-    
+    # # 수정       (이젠 필요없음 context.project에서 이미 현재 프로젝트가 결정되니까 전부 삭제가능 )
+    # def load_shotgrid_projects(self):
+    #     self.projects = list_projects(sg)
+    #     self.main_window.project_combo.clear()
+    #     for project in self.projects:
+    #         self.main_window.project_combo.addItem(project["name"])
 
-    # 선택된 프로젝트 가져오는 함수
+    #         # context 기준 자동 선택
+    #         if context.project and project["id"] == context.project["id"]:
+    #             self.main_window.project_combo.setCurrentText(project["name"])
+
+    # # 선택된 프로젝트 가져오는 함수
+    # def get_selected_project(self):
+    #     name = self.main_window.project_combo.currentText()
+    #     selected = next((p for p in self.projects if p["name"] == name), None)
+    #     return selected
+
     def get_selected_project(self):
-        name = self.main_window.project_combo.currentText()
-        selected = next((p for p in self.projects if p["name"] == name), None)
-        return selected
-    
+        return context.project  # 더 이상 ComboBox에 의존하지 않음
+
     # 업로드 시 선택된 프로젝트 사용
     def on_register_from_selected_excel(self):
         selected_excel = self.on_select_excel_version()
         if not selected_excel:
             return
 
-        selected_project = self.get_selected_project()
-        if not selected_project:
-            print("X 프로젝트가 선택되지 않았습니다.")
+        project = self.context.project
+        if not project:
+            print("Project selection failed.")
             return
         
     # 모든 체크박스 선택 / 해제
@@ -451,7 +474,7 @@ class Controller:
             checkbox = self.main_window.table.cellWidget(row, 0)
             if checkbox:
                 checkbox.setChecked(True)
-        print(f"✔ {row_count}개 항목 모두 체크됨")
+        print(f"✔ {row_count} All Checked")
 
     def toggle_select_all(self):
         row_count = self.main_window.table.rowCount()
@@ -464,17 +487,17 @@ class Controller:
 
         # 버튼 텍스트 업데이트
         if new_state:
-            self.main_window.toggle_select_button.setText("모두 해제")
-            print(f"{row_count}개 항목 전체 선택됨")
+            self.main_window.toggle_select_button.setText("All Deselect")
+            print(f"{row_count} selected")
         else:
-            self.main_window.toggle_select_button.setText("모두 선택")
-            print(f"전체 해제됨")
+            self.main_window.toggle_select_button.setText("All Select")
+            print(f"All Deselected")
 
         self.select_all_checked = new_state
 
     def update_project_label(self, project_name):
         if project_name:
-            self.main_window.project_label.setText(f"🔘 선택된 프로젝트: {project_name}")
+            self.main_window.project_label.setText(f"🔘 Selected Project: {project_name}")
         else:
-            self.main_window.project_label.setText("🛑 선택된 프로젝트: 없음")
+            self.main_window.project_label.setText("🛑 Selected Project: None")
 
